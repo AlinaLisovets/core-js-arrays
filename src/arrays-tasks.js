@@ -264,8 +264,13 @@ function distinct(arr) {
  *    createNDimensionalArray(4, 2) => [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
  *    createNDimensionalArray(1, 1) => [0]
  */
-function createNDimensionalArray(/* n, size */) {
-  throw new Error('Not implemented');
+function createNDimensionalArray(n, size) {
+  if (n === 1) {
+    return Array(size).fill(0);
+  }
+  return Array(size)
+    .fill(0)
+    .map(() => createNDimensionalArray(n - 1, size));
 }
 
 /**
@@ -313,8 +318,11 @@ function selectMany(arr, childrenSelector) {
  *   calculateBalance([ [ 10, 8 ], [ 1, 5 ] ])  => (10 - 8) + (1 - 5) = 2 + -4 = -2
  *   calculateBalance([]) => 0
  */
-function calculateBalance(/* arr */) {
-  throw new Error('Not implemented');
+function calculateBalance(arr) {
+  const a = arr.flat();
+  const b = a.map((x) => (a.indexOf(x) % 2 === 0 ? x : x * -1));
+  b.reduce((acc, curr) => acc + curr, 0);
+  return b.reduce((acc, curr) => acc + curr, 0);
 }
 
 /**
@@ -485,8 +493,16 @@ function findCommonElements(arr1, arr2) {
  *    findLongestIncreasingSubsequence([3, 10, 2, 1, 20]) => 2
  *    findLongestIncreasingSubsequence([50, 3, 10, 7, 40, 80]) => 3
  */
-function findLongestIncreasingSubsequence(/* nums */) {
-  throw new Error('Not implemented');
+function findLongestIncreasingSubsequence(nums) {
+  return nums
+    .reduce(
+      (acc, cur, i, arr) =>
+        acc.length > 0 && cur > arr[i - 1]
+          ? [...acc.slice(0, -1), [...acc[acc.length - 1], cur]]
+          : [...acc, [cur]],
+      []
+    )
+    .reduce((acc, cur) => (acc.length > cur.length ? acc : cur), []).length;
 }
 
 /**
@@ -578,8 +594,17 @@ function sortDigitNamesByNumericOrder(arr) {
  *   swapHeadAndTail([]) => []
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let result = [];
+  if (arr.length % 2 === 0) {
+    result = arr.concat(arr.splice(0, arr.length / 2));
+  } else if (arr.length % 2 === 1) {
+    const n = Math.floor(arr.length / 2);
+    result = arr.concat(arr.splice(0, n));
+    const b = result.splice(0, 1);
+    result.splice(n, 0, b[0]);
+  }
+  return result;
 }
 
 module.exports = {
